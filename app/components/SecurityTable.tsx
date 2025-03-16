@@ -3,6 +3,7 @@ import DataTable, { SortDirection } from './Table';
 import { useAdvisorsWithAccounts } from '../hooks/useAdvisorsWithAccounts';
 import { useSearchParams } from 'next/navigation';
 import useSWR from 'swr';
+import Image from 'next/image';
 
 interface Security {
     id: string;
@@ -11,18 +12,37 @@ interface Security {
     dateAdded: string;
 }
 
+function SecurityCard({ security, totalValue }: { 
+    security: { name: string; ticker: string; }, 
+    totalValue: number 
+}) {
+    return (
+        <div className="border rounded-lg p-4 mb-6 flex items-center space-x-4 bg-white dark:bg-gray-800 shadow-sm">
+            <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                <span className="text-xl font-semibold text-gray-500 dark:text-gray-400">
+                    {security.ticker.slice(0, 2)}
+                </span>
+            </div>
+            <div className="flex-grow">
+                <h3 className="font-semibold text-lg">{security.name}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{security.ticker}</p>
+            </div>
+            <div className="text-right">
+                <p className="text-sm text-gray-500 dark:text-gray-400">Total Value</p>
+                <p className="font-semibold text-lg">
+                    {new Intl.NumberFormat('en-US', { 
+                        style: 'currency', 
+                        currency: 'USD' 
+                    }).format(totalValue)}
+                </p>
+            </div>
+        </div>
+    );
+}
+
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 const securityColumns = [
-    { 
-        label: 'Name', 
-        key: 'name', 
-        renderCell: (holding: any) => holding.securityName || holding.ticker,
-        sortingFn: (a: any, b: any, sortDirection: SortDirection) => 
-            sortDirection === 'asc' ? 
-                (a.securityName || a.ticker).localeCompare(b.securityName || b.ticker) : 
-                (b.securityName || b.ticker).localeCompare(a.securityName || a.ticker)
-    },
     { 
         label: 'Ticker', 
         key: 'ticker', 
@@ -101,9 +121,20 @@ export default function SecurityTable() {
         };
     });
 
+    // Get the first holding for the SecurityCard
+    const firstHolding = holdingsWithIds[0];
+    const firstHoldingTotalValue = firstHolding.units * firstHolding.unitPrice;
+
     return (
         <div>
             <h2 className="text-xl font-semibold mb-4">Securities in {selectedAccount.name}</h2>
+            <SecurityCard 
+                security={{
+                    name: firstHolding.securityName || firstHolding.ticker,
+                    ticker: firstHolding.ticker
+                }}
+                totalValue={firstHoldingTotalValue}
+            />
             <DataTable 
                 entries={holdingsWithIds}
                 columns={securityColumns}

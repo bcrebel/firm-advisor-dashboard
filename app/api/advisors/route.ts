@@ -77,6 +77,83 @@ const advisors = [
       { name: "Vanguard", repId: "5525" },
       { name: "Schwab", repId: "1277" }
     ]
+  },
+  {
+    id: "11",
+    name: "Alexander Wright",
+    custodians: [
+      { name: "Schwab", repId: "1278" },
+      { name: "Fidelity", repId: "9001" }
+    ]
+  },
+  {
+    id: "12",
+    name: "Michelle Lee",
+    custodians: [
+      { name: "Vanguard", repId: "5526" },
+      { name: "Schwab", repId: "1279" }
+    ]
+  },
+  {
+    id: "13",
+    name: "Christopher Brown",
+    custodians: [
+      { name: "Fidelity", repId: "9002" }
+    ]
+  },
+  {
+    id: "14",
+    name: "Amanda Davis",
+    custodians: [
+      { name: "Schwab", repId: "1280" },
+      { name: "Vanguard", repId: "5527" }
+    ]
+  },
+  {
+    id: "15",
+    name: "Kevin Park",
+    custodians: [
+      { name: "Fidelity", repId: "9003" }
+    ]
+  },
+  {
+    id: "16",
+    name: "Rachel Anderson",
+    custodians: [
+      { name: "Vanguard", repId: "5528" },
+      { name: "Schwab", repId: "1281" }
+    ]
+  },
+  {
+    id: "17",
+    name: "Thomas White",
+    custodians: [
+      { name: "Fidelity", repId: "9004" },
+      { name: "Vanguard", repId: "5529" }
+    ]
+  },
+  {
+    id: "18",
+    name: "Maria Lopez",
+    custodians: [
+      { name: "Schwab", repId: "1282" }
+    ]
+  },
+  {
+    id: "19",
+    name: "Daniel Turner",
+    custodians: [
+      { name: "Vanguard", repId: "5530" },
+      { name: "Fidelity", repId: "9005" }
+    ]
+  },
+  {
+    id: "20",
+    name: "Jessica Miller",
+    custodians: [
+      { name: "Schwab", repId: "1283" },
+      { name: "Vanguard", repId: "5531" }
+    ]
   }
 ];
 

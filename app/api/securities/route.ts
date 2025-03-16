@@ -60,6 +60,66 @@ const securities = [
     ticker: "VGSLX",
     name: "Vanguard Real Estate Index Fund Admiral Shares",
     dateAdded: "2003-09-05T17:35:25.800Z"
+  },
+  {
+    id: "2o5012nl-3k3j-415n-j3l4-il1o3l453m6m",
+    ticker: "VWUSX",
+    name: "Vanguard U.S. Growth Fund Admiral Shares",
+    dateAdded: "2003-10-15T14:20:30.400Z"
+  },
+  {
+    id: "3p6123om-4l4k-526o-k4m5-jm2p4m564n7n",
+    ticker: "FBALX",
+    name: "Fidelity Balanced Fund",
+    dateAdded: "2003-11-20T11:45:15.200Z"
+  },
+  {
+    id: "4q7234pn-5m5l-637p-l5n6-kn3q5n675o8o",
+    ticker: "SWLGX",
+    name: "Schwab Large-Cap Growth Index Fund",
+    dateAdded: "2003-12-25T09:30:40.100Z"
+  },
+  {
+    id: "5r8345qo-6n6m-748q-m6o7-lo4r6o786p9p",
+    ticker: "VWINX",
+    name: "Vanguard Wellesley Income Fund Admiral Shares",
+    dateAdded: "2004-01-30T16:15:20.300Z"
+  },
+  {
+    id: "6s9456rp-7o7n-859r-n7p8-mp5s7p897q0q",
+    ticker: "FSMAX",
+    name: "Fidelity Extended Market Index Fund",
+    dateAdded: "2004-03-05T13:50:45.500Z"
+  },
+  {
+    id: "7t0567sq-8p8o-960s-o8q9-nq6t8q908r1r",
+    ticker: "SWISX",
+    name: "Schwab International Index Fund",
+    dateAdded: "2004-04-10T10:25:30.700Z"
+  },
+  {
+    id: "8u1678tr-9q9p-071t-p9r0-or7u9r019s2s",
+    ticker: "VGHCX",
+    name: "Vanguard Health Care Fund Admiral Shares",
+    dateAdded: "2004-05-15T08:40:15.900Z"
+  },
+  {
+    id: "9v2789us-0r0q-182u-q0s1-ps8v0s120t3t",
+    ticker: "FSKAX",
+    name: "Fidelity Total Market Index Fund",
+    dateAdded: "2004-06-20T15:15:50.100Z"
+  },
+  {
+    id: "0w3890vt-1s1r-293v-r1t2-qt9w1t231u4u",
+    ticker: "SWOBX",
+    name: "Schwab Target 2060 Index Fund",
+    dateAdded: "2004-07-25T12:30:25.300Z"
+  },
+  {
+    id: "1x4901wu-2t2s-304w-s2u3-ru0x2u342v5v",
+    ticker: "VDIGX",
+    name: "Vanguard Dividend Growth Fund",
+    dateAdded: "2004-08-30T09:55:10.500Z"
   }
 ];
 

@@ -38,7 +38,7 @@ export default function AdvisorTable() {
 
     return (
         <DataTable 
-            entries={data} 
+            entries={data || []} 
             columns={advisorColumns} 
             onRowClick={handleRowClick}
             selectedId={selectedId}

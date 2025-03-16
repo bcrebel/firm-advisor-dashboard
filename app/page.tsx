@@ -1,5 +1,6 @@
 import AdvisorTable from './components/AdvisorTable';
 import AccountTable from './components/AccountTable';
+import SecurityTable from './components/SecurityTable';
 import type { Advisor } from './hooks/useAdvisorsWithAccounts';
 
 interface Account {
@@ -55,6 +56,9 @@ export default async function Page() {
             </section>
             <section>
                 <AccountTable />
+            </section>
+            <section>
+                <SecurityTable />
             </section>
         </div>
     );

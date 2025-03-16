@@ -1,7 +1,8 @@
 'use client'
 import DataTable, { SortDirection } from './Table';
 import { useAdvisorsWithAccounts } from '../hooks/useAdvisorsWithAccounts';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const accountColumns = [
     { 
@@ -49,7 +50,24 @@ const accountColumns = [
 export default function AccountTable() {
     const { data } = useAdvisorsWithAccounts();
     const searchParams = useSearchParams();
+    const router = useRouter();
     const selectedAdvisorId = searchParams.get('advisorId');
+    const selectedAccountNumber = searchParams.get('accountNumber') || undefined;
+
+    useEffect(() => {
+        if (!selectedAdvisorId || !data) return;
+        
+        const selectedAdvisor = data.find(advisor => advisor.id === selectedAdvisorId);
+        if (!selectedAdvisor) return;
+
+        const accounts = selectedAdvisor.accounts || [];
+        if (accounts.length > 0 && !selectedAccountNumber) {
+            const params = new URLSearchParams(searchParams);
+            params.set('advisorId', selectedAdvisorId);
+            params.set('accountNumber', accounts[0].number);
+            router.replace(`?${params.toString()}`, { scroll: false });
+        }
+    }, [selectedAdvisorId, selectedAccountNumber, data, router, searchParams]);
 
     if (!selectedAdvisorId) {
         return <div className="text-gray-500 italic">Select an advisor to view their accounts</div>;
@@ -71,12 +89,32 @@ export default function AccountTable() {
         id: account.number // Using account number as the unique identifier
     }));
 
+    const handleRowClick = (account: any) => {
+        const params = new URLSearchParams(searchParams);
+        params.set('advisorId', selectedAdvisorId);
+        params.set('accountNumber', account.number);
+        router.push(`?${params.toString()}`);
+    };
+
+    const handleRowHover = (account: any) => {
+        // Only update hover state if no account is currently selected
+        if (!selectedAccountNumber) {
+            const params = new URLSearchParams(searchParams);
+            params.set('advisorId', selectedAdvisorId);
+            params.set('accountNumber', account.number);
+            router.replace(`?${params.toString()}`, { scroll: false });
+        }
+    };
+
     return (
         <div>
             <h2 className="text-xl font-semibold mb-4">Accounts for {selectedAdvisor.name}</h2>
             <DataTable 
                 entries={accountsWithIds}
                 columns={accountColumns}
+                onRowClick={handleRowClick}
+                onRowHover={handleRowHover}
+                selectedId={selectedAccountNumber}
             />
         </div>
     );

@@ -40,11 +40,13 @@ export default function DataTable<
   entries,
   columns,
   onRowClick,
+  onRowHover,
   selectedId,
 }: Readonly<{
   entries: Array<T>;
   columns: Columns<T>;
   onRowClick?: (entry: T) => void;
+  onRowHover?: (entry: T) => void;
   selectedId?: string | number;
 }>) {
   const [sortField, setSortField] = useState<string | null>(
@@ -91,6 +93,7 @@ export default function DataTable<
             <tr 
               key={entry.id}
               onClick={() => onRowClick?.(entry)}
+              onMouseEnter={() => onRowHover?.(entry)}
               className={`cursor-pointer ${
                 entry.id === selectedId 
                   ? 'bg-gray-100 dark:bg-gray-700' 

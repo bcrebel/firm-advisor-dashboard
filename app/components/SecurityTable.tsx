@@ -12,20 +12,27 @@ interface Security {
     dateAdded: string;
 }
 
-function SecurityCard({ security, totalValue }: { 
-    security: { name: string; ticker: string; }, 
-    totalValue: number 
+function AccountCard({ account }: { 
+    account: { 
+        name: string;
+        holdings: Array<{
+            units: number;
+            unitPrice: number;
+        }>;
+    }
 }) {
+    const totalValue = account.holdings.reduce((sum, holding) => 
+        sum + (holding.units * holding.unitPrice), 0);
+
     return (
         <div className="border rounded-lg p-4 mb-6 flex items-center space-x-4 bg-white dark:bg-gray-800 shadow-sm">
             <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
                 <span className="text-xl font-semibold text-gray-500 dark:text-gray-400">
-                    {security.ticker.slice(0, 2)}
+                    {account.name.slice(0, 2)}
                 </span>
             </div>
             <div className="flex-grow">
-                <h3 className="font-semibold text-lg">{security.name}</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{security.ticker}</p>
+                <h3 className="font-semibold text-lg">{account.name}</h3>
             </div>
             <div className="text-right">
                 <p className="text-sm text-gray-500 dark:text-gray-400">Total Value</p>
@@ -121,20 +128,10 @@ export default function SecurityTable() {
         };
     });
 
-    // Get the first holding for the SecurityCard
-    const firstHolding = holdingsWithIds[0];
-    const firstHoldingTotalValue = firstHolding.units * firstHolding.unitPrice;
-
     return (
         <div>
             <h2 className="text-xl font-semibold mb-4">Securities in {selectedAccount.name}</h2>
-            <SecurityCard 
-                security={{
-                    name: firstHolding.securityName || firstHolding.ticker,
-                    ticker: firstHolding.ticker
-                }}
-                totalValue={firstHoldingTotalValue}
-            />
+            <AccountCard account={selectedAccount} />
             <DataTable 
                 entries={holdingsWithIds}
                 columns={securityColumns}

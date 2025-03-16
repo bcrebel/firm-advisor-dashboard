@@ -120,6 +120,66 @@ const securities = [
     ticker: "VDIGX",
     name: "Vanguard Dividend Growth Fund",
     dateAdded: "2004-08-30T09:55:10.500Z"
+  },
+  {
+    id: "2y5012xv-3u3t-415x-t3v4-sv1y3v453w6w",
+    ticker: "AMZN",
+    name: "Amazon.com Inc",
+    dateAdded: "2004-09-05T10:15:20.600Z"
+  },
+  {
+    id: "3z6123yw-4v4u-526y-u4w5-tw2z4w564x7x",
+    ticker: "AAPL",
+    name: "Apple Inc",
+    dateAdded: "2004-09-10T11:30:40.700Z"
+  },
+  {
+    id: "4a7234zx-5w5v-637z-v5x6-ux3a5x675y8y",
+    ticker: "MSFT",
+    name: "Microsoft Corporation",
+    dateAdded: "2004-09-15T12:45:50.800Z"
+  },
+  {
+    id: "5b8345ay-6x6w-748a-w6y7-vy4b6y786z9z",
+    ticker: "GOOGL",
+    name: "Alphabet Inc Class A",
+    dateAdded: "2004-09-20T13:55:30.900Z"
+  },
+  {
+    id: "6c9456bz-7y7x-859b-x7z8-wz5c7z897a0a",
+    ticker: "NVDA",
+    name: "NVIDIA Corporation",
+    dateAdded: "2004-09-25T14:20:45.100Z"
+  },
+  {
+    id: "7d0567ca-8z8y-960c-y8a9-xa6d8a908b1b",
+    ticker: "TSLA",
+    name: "Tesla Inc",
+    dateAdded: "2004-09-30T15:35:55.200Z"
+  },
+  {
+    id: "8e1678db-9a9z-071d-z9b0-yb7e9b019c2c",
+    ticker: "META",
+    name: "Meta Platforms Inc",
+    dateAdded: "2004-10-05T16:50:15.300Z"
+  },
+  {
+    id: "9f2789ec-0b0a-182e-a0c1-zc8f0c120d3d",
+    ticker: "BRK.B",
+    name: "Berkshire Hathaway Inc Class B",
+    dateAdded: "2004-10-10T17:05:25.400Z"
+  },
+  {
+    id: "0g3890fd-1c1b-293f-b1d2-ad9g1d231e4e",
+    ticker: "JPM",
+    name: "JPMorgan Chase & Co",
+    dateAdded: "2004-10-15T18:20:35.500Z"
+  },
+  {
+    id: "1h4901ge-2d2c-304g-c2e3-be0h2e342f5f",
+    ticker: "JNJ",
+    name: "Johnson & Johnson",
+    dateAdded: "2004-10-20T19:35:45.600Z"
   }
 ];
 

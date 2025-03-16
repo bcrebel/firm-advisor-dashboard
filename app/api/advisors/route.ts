@@ -2,158 +2,104 @@ import { NextResponse } from "next/server";
 
 const advisors = [
   {
-    id: "1",
-    name: "Randall Morrison",
-    custodians: [
-      { name: "Schwab", repId: "1271" },
-      { name: "Fidelity", repId: "8996" }
-    ]
-  },
-  {
-    id: "2",
+    id: "REP123",
     name: "Sarah Johnson",
-    custodians: [
-      { name: "Schwab", repId: "1272" },
-      { name: "Vanguard", repId: "5521" }
-    ]
+    dateAdded: "2020-01-15T09:00:00.000Z"
   },
   {
-    id: "3",
+    id: "REP456",
     name: "Michael Chen",
-    custodians: [
-      { name: "Fidelity", repId: "8997" }
-    ]
+    dateAdded: "2020-03-20T14:30:00.000Z"
   },
   {
-    id: "4",
+    id: "REP789",
     name: "Emily Rodriguez",
-    custodians: [
-      { name: "Schwab", repId: "1273" },
-      { name: "Fidelity", repId: "8998" }
-    ]
+    dateAdded: "2020-06-10T11:15:00.000Z"
   },
   {
-    id: "5",
+    id: "REP234",
     name: "David Kim",
-    custodians: [
-      { name: "Vanguard", repId: "5522" }
-    ]
+    dateAdded: "2020-02-05T10:45:00.000Z"
   },
   {
-    id: "6",
+    id: "REP567",
     name: "Lisa Thompson",
-    custodians: [
-      { name: "Schwab", repId: "1274" },
-      { name: "Vanguard", repId: "5523" }
-    ]
+    dateAdded: "2020-04-12T13:20:00.000Z"
   },
   {
-    id: "7",
+    id: "REP890",
     name: "James Wilson",
-    custodians: [
-      { name: "Fidelity", repId: "8999" },
-      { name: "Vanguard", repId: "5524" }
-    ]
+    dateAdded: "2020-07-25T15:40:00.000Z"
   },
   {
-    id: "8",
+    id: "REP345",
     name: "Patricia Garcia",
-    custodians: [
-      { name: "Schwab", repId: "1275" }
-    ]
+    dateAdded: "2020-08-30T09:15:00.000Z"
   },
   {
-    id: "9",
+    id: "REP678",
     name: "Robert Taylor",
-    custodians: [
-      { name: "Fidelity", repId: "9000" },
-      { name: "Schwab", repId: "1276" }
-    ]
+    dateAdded: "2020-09-18T11:50:00.000Z"
   },
   {
-    id: "10",
+    id: "REP901",
     name: "Jennifer Martinez",
-    custodians: [
-      { name: "Vanguard", repId: "5525" },
-      { name: "Schwab", repId: "1277" }
-    ]
+    dateAdded: "2020-10-05T14:25:00.000Z"
   },
   {
-    id: "11",
+    id: "REP432",
     name: "Alexander Wright",
-    custodians: [
-      { name: "Schwab", repId: "1278" },
-      { name: "Fidelity", repId: "9001" }
-    ]
+    dateAdded: "2020-11-15T16:30:00.000Z"
   },
   {
-    id: "12",
+    id: "REP765",
     name: "Michelle Lee",
-    custodians: [
-      { name: "Vanguard", repId: "5526" },
-      { name: "Schwab", repId: "1279" }
-    ]
+    dateAdded: "2020-12-20T10:10:00.000Z"
   },
   {
-    id: "13",
+    id: "REP098",
     name: "Christopher Brown",
-    custodians: [
-      { name: "Fidelity", repId: "9002" }
-    ]
+    dateAdded: "2021-01-08T13:45:00.000Z"
   },
   {
-    id: "14",
+    id: "REP543",
     name: "Amanda Davis",
-    custodians: [
-      { name: "Schwab", repId: "1280" },
-      { name: "Vanguard", repId: "5527" }
-    ]
+    dateAdded: "2021-02-14T15:20:00.000Z"
   },
   {
-    id: "15",
+    id: "REP876",
     name: "Kevin Park",
-    custodians: [
-      { name: "Fidelity", repId: "9003" }
-    ]
+    dateAdded: "2021-03-22T12:05:00.000Z"
   },
   {
-    id: "16",
+    id: "REP210",
     name: "Rachel Anderson",
-    custodians: [
-      { name: "Vanguard", repId: "5528" },
-      { name: "Schwab", repId: "1281" }
-    ]
+    dateAdded: "2021-04-30T09:40:00.000Z"
   },
   {
-    id: "17",
+    id: "REP654",
     name: "Thomas White",
-    custodians: [
-      { name: "Fidelity", repId: "9004" },
-      { name: "Vanguard", repId: "5529" }
-    ]
+    dateAdded: "2021-05-17T11:25:00.000Z"
   },
   {
-    id: "18",
+    id: "REP111",
     name: "Maria Lopez",
-    custodians: [
-      { name: "Schwab", repId: "1282" }
-    ]
+    dateAdded: "2021-06-28T14:50:00.000Z"
   },
   {
-    id: "19",
+    id: "REP321",
     name: "Daniel Turner",
-    custodians: [
-      { name: "Vanguard", repId: "5530" },
-      { name: "Fidelity", repId: "9005" }
-    ]
+    dateAdded: "2021-07-15T16:15:00.000Z"
   },
   {
-    id: "20",
+    id: "REP222",
     name: "Jessica Miller",
-    custodians: [
-      { name: "Schwab", repId: "1283" },
-      { name: "Vanguard", repId: "5531" }
-    ]
+    dateAdded: "2021-08-23T10:30:00.000Z"
+  },
+  {
+    id: "REP333",
+    name: "William Santos",
+    dateAdded: "2021-09-12T13:55:00.000Z"
   }
 ];
 

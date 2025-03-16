@@ -15,31 +15,29 @@ export interface Account {
 export interface Advisor {
   id: string;
   name: string;
-  custodians: {
-    name: string;
-    repId: string;
-  }[];
+  dateAdded: string;
   accounts?: Account[];
 }
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export function useAdvisorsWithAccounts() {
-    const { data: advisors, error: advisorError, isLoading: advisorLoading } = useSWR<Advisor[]>('/api/advisors', fetcher);
-    const { data: accounts, error: accountError, isLoading: accountLoading } = useSWR<Account[]>('/api/accounts', fetcher);
+    const { data: advisors, error: advisorsError } = useSWR<Advisor[]>('/api/advisors', fetcher);
+    const { data: accounts, error: accountsError } = useSWR<Account[]>('/api/accounts', fetcher);
 
-    const advisorsWithAccounts = advisors?.map(advisor => ({
+    const isLoading = !advisors || !accounts;
+    const error = advisorsError || accountsError;
+
+    const data = advisors?.map(advisor => ({
         ...advisor,
         accounts: accounts?.filter(account => 
-            advisor.custodians.some(custodian => 
-                custodian.repId === account.repId && custodian.name === account.custodian
-            )
+            account.repId === advisor.id
         )
-    })) || [];
+    }));
 
     return {
-        data: advisorsWithAccounts,
-        isLoading: advisorLoading || accountLoading,
-        error: advisorError || accountError
+        data,
+        error,
+        isLoading
     };
 } 

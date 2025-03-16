@@ -1,4 +1,6 @@
 import AdvisorTable from './components/AdvisorTable';
+import AccountTable from './components/AccountTable';
+import type { Advisor } from './hooks/useAdvisorsWithAccounts';
 
 interface Account {
   name: string;
@@ -45,6 +47,15 @@ async function getData() {
 }
 
 export default async function Page() {
-
-    return <AdvisorTable />
+    return (
+        <div className="p-4 space-y-8">
+            <section>
+                <h1 className="text-2xl font-bold mb-4">Advisors</h1>
+                <AdvisorTable />
+            </section>
+            <section>
+                <AccountTable />
+            </section>
+        </div>
+    );
 }

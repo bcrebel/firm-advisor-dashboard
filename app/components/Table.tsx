@@ -39,9 +39,13 @@ export default function DataTable<
 >({
   entries,
   columns,
+  onRowClick,
+  selectedId,
 }: Readonly<{
   entries: Array<T>;
   columns: Columns<T>;
+  onRowClick?: (entry: T) => void;
+  selectedId?: string | number;
 }>) {
   const [sortField, setSortField] = useState<string | null>(
     null,
@@ -84,7 +88,15 @@ export default function DataTable<
         </thead>
         <tbody>
           {sortedEntries.map((entry) => (
-            <tr key={entry.id}>
+            <tr 
+              key={entry.id}
+              onClick={() => onRowClick?.(entry)}
+              className={`cursor-pointer ${
+                entry.id === selectedId 
+                  ? 'bg-gray-100 dark:bg-gray-700' 
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+            >
               {columns.map(({ key, renderCell }) => (
                 <td key={key}>{renderCell(entry)}</td>
               ))}

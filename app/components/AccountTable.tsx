@@ -61,7 +61,7 @@ export default function AccountTable() {
     }
 
     // Add an id field to each account for the DataTable component
-    const accountsWithIds = accounts.map(account => ({
+    const accountsWithIds = accounts.map((account: Account) => ({
         ...account,
         id: account.number // Using account number as the unique identifier
     }));
@@ -73,7 +73,7 @@ export default function AccountTable() {
     return (
         <div>
             <h2 className="text-xl font-semibold mb-4">Accounts for {selectedAdvisor.name}</h2>
-            <DataTable 
+            <DataTable<Account & { id: string }> 
                 entries={accountsWithIds}
                 columns={accountColumns}
                 onRowClick={handleRowClick}

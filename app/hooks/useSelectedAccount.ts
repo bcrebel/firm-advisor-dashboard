@@ -86,6 +86,7 @@ export function useSelectedAccount() {
             const category = security ? categoriesMap.get(security.categoryId) : undefined;
             return {
                 ...holding,
+                id: holding.ticker,
                 categoryName: category?.title
             };
         })

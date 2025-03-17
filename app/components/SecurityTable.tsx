@@ -1,16 +1,6 @@
 'use client'
 import DataTable, { SortDirection } from './Table';
-import { useAdvisorsWithAccounts } from '../hooks/useAdvisorsWithAccounts';
-import { useSearchParams } from 'next/navigation';
-import useSWR from 'swr';
-import Image from 'next/image';
-
-interface Security {
-    id: string;
-    ticker: string;
-    name: string;
-    dateAdded: string;
-}
+import { useSelectedAccount } from '../hooks/useSelectedAccount';
 
 function AccountCard({ account }: { 
     account: { 
@@ -24,30 +14,68 @@ function AccountCard({ account }: {
     const totalValue = account.holdings.reduce((sum, holding) => 
         sum + (holding.units * holding.unitPrice), 0);
 
+    const columns = [
+        {
+            label: 'Asset Class',
+            key: 'class',
+            renderCell: (holding: any) => holding.categoryName,
+            sortingFn: (a: any, b: any, sortDirection: SortDirection) => 
+                sortDirection === 'asc' ? a.categoryName.localeCompare(b.categoryName) : b.categoryName.localeCompare(a.categoryName)
+        },
+        {
+            label: 'No. of Assets',
+            key: 'numAssets',
+            renderCell: (holding: any) => account.holdings.filter(h => h.categoryName === holding.categoryName).length,
+            sortingFn: (a: any, b: any, sortDirection: SortDirection) => 
+                sortDirection === 'asc' ? a.holdings.length - b.holdings.length : b.holdings.length - a.holdings.length
+        },
+        {
+            label: '% of Assets',
+            key: 'percentOfAssets',
+            renderCell: (holding: any) => {
+                const total = holding.units * holding.unitPrice;
+                return ((total / totalValue) * 100).toFixed(2) + '%';
+            }
+        },
+        {
+            label: 'Value',
+            key: 'value',
+            renderCell: (holding: any) => {
+                const total = holding.units * holding.unitPrice;
+                return new Intl.NumberFormat('en-US', { 
+                    style: 'currency', 
+                    currency: 'USD' 
+                }).format(total);
+            }
+        }
+    ]
     return (
-        <div className="border rounded-lg p-4 mb-6 flex items-center space-x-4 bg-white dark:bg-gray-800 shadow-sm">
-            <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                <span className="text-xl font-semibold text-gray-500 dark:text-gray-400">
-                    {account.name.slice(0, 2)}
-                </span>
+        <div className="border flex flex-col rounded-lg p-4 mb-6">
+            <div>
+                <div className="flex items-center space-x-4 bg-white dark:bg-gray-800 shadow-sm mb-2">
+                <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                    <span className="text-xl font-semibold text-gray-500 dark:text-gray-400">
+                        {account.name.slice(0, 2)}
+                    </span>
+                </div>
+                <div className="flex-grow">
+                    <h3 className="font-semibold text-lg">{account.name}</h3>
+                </div>
+                <div className="text-right">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Total Value</p>
+                    <p className="font-semibold text-lg">
+                        {new Intl.NumberFormat('en-US', { 
+                            style: 'currency', 
+                            currency: 'USD' 
+                        }).format(totalValue)}
+                    </p>
+                </div>
             </div>
-            <div className="flex-grow">
-                <h3 className="font-semibold text-lg">{account.name}</h3>
-            </div>
-            <div className="text-right">
-                <p className="text-sm text-gray-500 dark:text-gray-400">Total Value</p>
-                <p className="font-semibold text-lg">
-                    {new Intl.NumberFormat('en-US', { 
-                        style: 'currency', 
-                        currency: 'USD' 
-                    }).format(totalValue)}
-                </p>
-            </div>
+                <DataTable entries={account.holdings} columns={columns} />  
+        </div>
         </div>
     );
 }
-
-const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 const securityColumns = [
     { 
@@ -93,24 +121,10 @@ const securityColumns = [
 ];
 
 export default function SecurityTable() {
-    const { data: advisorsData } = useAdvisorsWithAccounts();
-    const { data: securitiesData } = useSWR<Security[]>('/api/securities', fetcher);
-    const searchParams = useSearchParams();
-    const selectedAdvisorId = searchParams.get('advisorId');
-    const selectedAccountNumber = searchParams.get('accountNumber');
+    const { selectedAccount } = useSelectedAccount();
 
-    if (!selectedAdvisorId || !selectedAccountNumber) {
-        return <div className="text-gray-500 italic">Select an account to view its securities</div>;
-    }
-
-    const selectedAdvisor = advisorsData?.find(advisor => advisor.id === selectedAdvisorId);
-    if (!selectedAdvisor) {
-        return <div className="text-red-500">Advisor not found</div>;
-    }
-
-    const selectedAccount = selectedAdvisor.accounts?.find(account => account.number === selectedAccountNumber);
     if (!selectedAccount) {
-        return <div className="text-red-500">Account not found</div>;
+        return <div className="text-gray-500 italic">Select an account to view its securities</div>;
     }
 
     const holdings = selectedAccount.holdings || [];
@@ -118,15 +132,11 @@ export default function SecurityTable() {
         return <div className="text-gray-500 italic">No securities found in this account</div>;
     }
 
-    // Add an id field to each holding and join with securities data
-    const holdingsWithIds = holdings.map((holding, index) => {
-        const security = securitiesData?.find(s => s.ticker === holding.ticker);
-        return {
-            ...holding,
-            id: `${selectedAccountNumber}-${holding.ticker}-${index}`,
-            securityName: security?.name // Add the security name from the securities data
-        };
-    });
+    // Add an id field to each holding
+    const holdingsWithIds = holdings.map((holding: { ticker: string; units: number; unitPrice: number; categoryName?: string }, index: number) => ({
+        ...holding,
+        id: `${selectedAccount.number}-${holding.ticker}-${index}`
+    }));
 
     return (
         <div>

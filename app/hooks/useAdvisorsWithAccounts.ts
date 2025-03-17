@@ -28,11 +28,17 @@ export function useAdvisorsWithAccounts() {
     const isLoading = !advisors || !accounts;
     const error = advisorsError || accountsError;
 
+    const accountMap = new Map();
+    accounts?.forEach(account => {
+        if (!accountMap.has(account.repId)) {
+            accountMap.set(account.repId, []);
+        }
+        accountMap.get(account.repId).push(account);
+    });
+
     const data = advisors?.map(advisor => ({
         ...advisor,
-        accounts: accounts?.filter(account => 
-            account.repId === advisor.id
-        )
+        accounts: accountMap.get(advisor.id) || []
     }));
 
     return {

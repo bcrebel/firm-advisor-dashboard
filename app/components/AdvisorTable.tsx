@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 const advisorColumns = [
     { label: 'Name', key: 'name', renderCell: (advisor: Advisor) => advisor.name, sortingFn: (a: Advisor, b: Advisor, sortDirection: SortDirection) => sortDirection === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name) },
-    { label: 'Number of Accounts', key: 'accounts', renderCell: (advisor: Advisor) => advisor.accounts?.length || 0, 
+    { label: 'Total Accounts', key: 'accounts', renderCell: (advisor: Advisor) => <div className="text-right">{advisor.accounts?.length || 0}</div>, 
       sortingFn: (a: Advisor, b: Advisor, sortDirection: SortDirection) => {
         const aCount = a.accounts?.length || 0;
         const bCount = b.accounts?.length || 0;
@@ -42,6 +42,7 @@ export default function AdvisorTable() {
             columns={advisorColumns} 
             onRowClick={handleRowClick}
             selectedId={selectedId}
+            headerTextSize="xxs"
         />
     );
 }

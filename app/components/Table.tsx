@@ -43,6 +43,8 @@ export default function DataTable<
   onRowHover,
   onRowLeave,
   selectedId,
+  headerTextSize = 'xs',
+  bodyTextSize = 'sm',
 }: Readonly<{
   entries: Array<T>;
   columns: Columns<T>;
@@ -50,6 +52,8 @@ export default function DataTable<
   onRowHover?: (entry: T) => void;
   onRowLeave?: () => void;
   selectedId?: string | number;
+  headerTextSize?: 'xs' | 'sm' | 'base' | 'xxs';
+  bodyTextSize?: 'xs' | 'sm' | 'base' | 'xxs';
 }>) {
   const [sortField, setSortField] = useState<string | null>(
     null,
@@ -63,54 +67,68 @@ export default function DataTable<
     sortField,
     sortDirection,
   );
+  const textSizes = {
+    xxs: 'text-xxs',
+    xs: 'text-xs',
+    sm: 'text-sm',
+    base: 'text-base',
+  }
 
   return (
-    <div>
-      <table>
-        <thead>
+    <div className="bg-white rounded-lg p-3 w-full">
+      <table className=" min-w-full divide-y">
+        <thead className="w-full border-0">
           <tr>
-            {columns.map(({ label, key }) => (
-              <th key={key}>
-                <button
-                  onClick={() => {
-                    if (sortField !== key) {
-                      setSortField(key);
-                      setSortDirection('asc');
-                    } else {
-                      setSortDirection(
-                        sortDirection === 'asc'
-                          ? 'desc'
-                          : 'asc',
-                      );
-                    }
-                  }}>
-                  {label}
-                </button>
-              </th>
-            ))}
+            {columns.map(({ label, key }, index) => {
+              const headerTextAlign = columns.length > 2 && index >= columns.length - 2 ? 'text-right' : 'text-left';
+              return (
+                <th key={key} className={`border-b-1 border-gray-200 p-2 text-left ${headerTextAlign} ${textSizes[headerTextSize]} font-medium text-gray-500 uppercase tracking-wider bg-transparent`}>
+                  <button
+                    className={`space-x-1 hover:text-gray-700`}
+                    onClick={() => {
+                      if (sortField !== key) {
+                        setSortField(key);
+                        setSortDirection('asc');
+                      } else {
+                        setSortDirection(
+                          sortDirection === 'asc'
+                            ? 'desc'
+                            : 'asc',
+                        );
+                      }
+                    }}>
+                    {label}
+                  </button>
+                </th>
+              );
+            })}
           </tr>
         </thead>
-        <tbody>
-          {sortedEntries.map((entry) => (
+        <tbody className="bg-white">
+          {sortedEntries.map((entry, index) => (
             <tr 
               key={entry.id}
               onClick={() => onRowClick?.(entry)}
               onMouseEnter={() => onRowHover?.(entry)}
               onMouseLeave={() => onRowLeave?.()}
-              className={`cursor-pointer ${
+              className={`cursor-pointer transition-colors duration-150 ${
                 entry.id === selectedId 
-                  ? 'bg-gray-100 dark:bg-gray-700' 
-                  : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+                  ? 'bg-gray-100' 
+                  : 'hover:bg-gray-100'
               }`}
             >
-              {columns.map(({ key, renderCell }) => (
-                <td key={key}>{renderCell(entry)}</td>
-              ))}
+              {columns.map(({ key, renderCell }, index) => {
+                const bodyTextAlign = columns.length > 2 && index >= columns.length - 2 ? 'text-right' : 'text-left';
+                return (
+                  <td key={key} className={`p-2 whitespace-nowrap ${bodyTextAlign} ${textSizes[bodyTextSize]} text-gray-900`}>
+                    {renderCell(entry)}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>
       </table>
-      <hr />
     </div>
   );
 }

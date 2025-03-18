@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import DataTable, { SortDirection } from './Table';
 import { ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import SecurityTable from './SecurityTable';
+import ModalDialog from './Modal';
 
 const COLORS = [
     '#0088FE',  // Blue
@@ -20,19 +22,24 @@ interface AccountCardProps {
         holdings: Array<{
             units: number;
             unitPrice: number;
-            categoryName?: string;
+            categoryName: string;
+            ticker: string;
+            securityName?: string;
         }>;
     }
 }
 
 export default function AccountCard({ account }: AccountCardProps) {
     const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
-    const totalValue = account.holdings.reduce((sum, holding) => 
+    const [showModal, setShowModal] = useState(false);
+
+    const holdings = account.holdings || [];
+    const totalValue = holdings.reduce((sum, holding) => 
         sum + (holding.units * holding.unitPrice), 0);
 
     // Group holdings by category
-    const holdingsByCategory = account.holdings.reduce((acc, holding) => {
-        const category = holding.categoryName || 'Uncategorized';
+    const holdingsByCategory = holdings.reduce((acc, holding) => {
+        const category = holding.categoryName;
         const value = holding.units * holding.unitPrice;
         if (!acc[category]) {
             acc[category] = {
@@ -55,12 +62,12 @@ export default function AccountCard({ account }: AccountCardProps) {
         entry.color = COLORS[index % COLORS.length];
     });
 
-    const Circle = ({color = 'black'}) => <div style={{'backgroundColor': `${color}`}}className="w-4 h-4 rounded-full dark:bg-gray-700"></div>
+    const Circle = ({color = 'black'}) => <div style={{'backgroundColor': `${color}`}} className="w-2 h-2 rounded-full mr-2"></div>
     const columns = [
         {
             label: 'Asset Class',
             key: 'class',
-            renderCell: (holding: any) => <div><Circle color={holding.color} />{holding.categoryName}</div>,
+            renderCell: (holding: any) => <div className="flex items-center"><Circle color={holding.color} />{holding.categoryName}</div>,
             sortingFn: (a: any, b: any, sortDirection: SortDirection) => 
                 sortDirection === 'asc' ? a.categoryName.localeCompare(b.categoryName) : b.categoryName.localeCompare(a.categoryName)
         },
@@ -74,8 +81,9 @@ export default function AccountCard({ account }: AccountCardProps) {
         {
             label: '% of Assets',
             key: 'percentOfAssets',
+            headerOverride: 'text-right',
             renderCell: (holding: any) => {
-                return ((holding.value / totalValue) * 100).toFixed(2) + '%';
+                return <div className="text-right">{((holding.value / totalValue) * 100).toFixed(2) + '%'}</div>;
             },
             sortingFn: (a: any, b: any, sortDirection: SortDirection) => {
                 return sortDirection === 'asc' ? a.value - b.value : b.value - a.value;
@@ -84,11 +92,12 @@ export default function AccountCard({ account }: AccountCardProps) {
         {
             label: 'Value',
             key: 'value',
+            headerOverride: 'text-right',
             renderCell: (holding: any) => {
-                return new Intl.NumberFormat('en-US', { 
+                return <div className="text-right">{new Intl.NumberFormat('en-US', { 
                     style: 'currency', 
                     currency: 'USD' 
-                }).format(holding.value);
+                }).format(holding.value)}</div>;
             },
             sortingFn: (a: any, b: any, sortDirection: SortDirection) => {
                 return sortDirection === 'asc' ? a.value - b.value : b.value - a.value;
@@ -96,38 +105,50 @@ export default function AccountCard({ account }: AccountCardProps) {
         }
     ];
 
-console.log(categoryEntries)
     return (
-        <div className="border flex flex-col rounded-lg p-4 mb-6">
+        <div className="flex flex-col rounded-lg p-8 mb-6 bg-white">
             <div>
-                <div className="flex items-center space-x-4 bg-white dark:bg-gray-800 shadow-sm mb-2">
-                    <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                        <span className="text-xl font-semibold text-gray-500 dark:text-gray-400">
+         
+                <div className="flex">
+                <div className="flex-grow max-w-[600px]">
+                <div className="flex p-3 items-start space-x-4 bg-white mb-2">
+                    <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                        <span className="text-xl font-semibold text-gray-500">
                             {account.name.slice(0, 2)}
                         </span>
                     </div>
-                    <div className="flex-grow">
-                        <h3 className="font-semibold text-lg">{account.name}</h3>
+                    <div className="flex items-center">
+                        <div>
+                            <h3 className="font-semibold text-lg">{account.name}</h3>
+                            <div>
+                                <p className="font-semibold text-lg">
+                                    {new Intl.NumberFormat('en-US', { 
+                                        style: 'currency', 
+                                        currency: 'USD' 
+                                    }).format(totalValue)}
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <div className="text-right">
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Total Value</p>
-                        <p className="font-semibold text-lg">
-                            {new Intl.NumberFormat('en-US', { 
-                                style: 'currency', 
-                                currency: 'USD' 
-                            }).format(totalValue)}
-                        </p>
-                    </div>
+                    <button onClick={() => setShowModal(true)} className="flex items-center w-10 h-10 bg-gray-200 rounded-full justify-center ml-auto">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 4.75C13 4.33579 12.6642 4 12.25 4C11.8358 4 11.5 4.33579 11.5 4.75V11L4.75 11C4.33579 11 4 11.3358 4 11.75C4 12.1642 4.33579 12.5 4.75 12.5H11.5V19.25C11.5 19.6642 11.8358 20 12.25 20C12.6642 20 13 19.6642 13 19.25V12.5H19.25C19.6642 12.5 20 12.1642 20 11.75C20 11.3358 19.6642 11 19.25 11L13 11V4.75Z" stroke-width="1.5" fill="currentColor"></path></svg>
+                    </button>
+                    <ModalDialog open={showModal} onClose={() => setShowModal(false)}>
+                        <SecurityTable holdings={holdings} accountName={account.name} />
+                    </ModalDialog>
+
                 </div>
-                <DataTable 
-                    entries={categoryEntries} 
-                    columns={columns} 
-                    onRowHover={(entry) => setSelectedCategory(entry.categoryName)}
-                    onRowLeave={() => setSelectedCategory(undefined)}
-                    selectedId={selectedCategory}
-                />
-                <div style={{ height: '400px' }}>
-                    <ResponsiveContainer width="100%" height="100%">
+                    <DataTable 
+                        entries={categoryEntries} 
+                        columns={columns} 
+                        onRowHover={(entry) => setSelectedCategory(entry.categoryName)}
+                        onRowLeave={() => setSelectedCategory(undefined)}
+                        selectedId={selectedCategory}
+                        headerTextSize="xxs"
+                        bodyTextSize="xxs"
+                    />
+                </div>    
+                    <ResponsiveContainer width={325} height={325}>
                         <PieChart>
                             <Pie 
                                 data={categoryEntries} 
@@ -152,7 +173,9 @@ console.log(categoryEntries)
                         </PieChart>         
                     </ResponsiveContainer>
                 </div>
+      
             </div>
+     
         </div>
     );
 } 

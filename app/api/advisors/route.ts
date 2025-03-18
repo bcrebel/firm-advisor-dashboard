@@ -100,6 +100,56 @@ const advisors = [
     id: "REP333",
     name: "William Santos",
     dateAdded: "2021-09-12T13:55:00.000Z"
+  },
+  {
+    id: "REP444",
+    name: "Elizabeth Clark",
+    dateAdded: "2021-10-01T15:20:00.000Z"
+  },
+  {
+    id: "REP555",
+    name: "Richard Moore",
+    dateAdded: "2021-10-15T09:45:00.000Z"
+  },
+  {
+    id: "REP666",
+    name: "Sofia Rodriguez",
+    dateAdded: "2021-11-01T11:30:00.000Z"
+  },
+  {
+    id: "REP777",
+    name: "Matthew Harris",
+    dateAdded: "2021-11-15T14:15:00.000Z"
+  },
+  {
+    id: "REP888",
+    name: "Olivia Thompson",
+    dateAdded: "2021-12-01T16:40:00.000Z"
+  },
+  {
+    id: "REP999",
+    name: "Benjamin Lee",
+    dateAdded: "2021-12-15T10:25:00.000Z"
+  },
+  {
+    id: "REP000",
+    name: "Victoria Chen",
+    dateAdded: "2022-01-01T13:50:00.000Z"
+  },
+  {
+    id: "REP1234",
+    name: "Nathan Wright",
+    dateAdded: "2022-01-15T15:35:00.000Z"
+  },
+  {
+    id: "REP5678",
+    name: "Isabella Martinez",
+    dateAdded: "2022-02-01T09:20:00.000Z"
+  },
+  {
+    id: "REP9012",
+    name: "Lucas Anderson",
+    dateAdded: "2022-02-15T11:45:00.000Z"
   }
 ];
 

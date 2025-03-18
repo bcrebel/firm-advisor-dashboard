@@ -43,8 +43,10 @@ export default function DataTable<
   onRowHover,
   onRowLeave,
   selectedId,
+  containerClassName = '',
   headerTextSize = 'xs',
   bodyTextSize = 'sm',
+  headerClassName = '',
 }: Readonly<{
   entries: Array<T>;
   columns: Columns<T>;
@@ -52,6 +54,8 @@ export default function DataTable<
   onRowHover?: (entry: T) => void;
   onRowLeave?: () => void;
   selectedId?: string | number;
+  containerClassName?: string;
+  headerClassName?: string;
   headerTextSize?: 'xs' | 'sm' | 'base' | 'xxs';
   bodyTextSize?: 'xs' | 'sm' | 'base' | 'xxs';
 }>) {
@@ -75,9 +79,9 @@ export default function DataTable<
   }
 
   return (
-    <div className="bg-white rounded-lg p-3 w-full">
+    <div className={`bg-white rounded-lg p-3 w-full ${containerClassName}`}>
       <table className=" min-w-full divide-y">
-        <thead className="w-full border-0">
+        <thead className={`w-full border-0 ${headerClassName}`}>
           <tr>
             {columns.map(({ label, key }, index) => {
               const headerTextAlign = columns.length > 2 && index >= columns.length - 2 ? 'text-right' : 'text-left';

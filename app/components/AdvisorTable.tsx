@@ -43,6 +43,8 @@ export default function AdvisorTable() {
             onRowClick={handleRowClick}
             selectedId={selectedId}
             headerTextSize="xxs"
+            containerClassName="max-h-[calc(100vh-4rem)] overflow-y-auto pt-0"
+            headerClassName="sticky top-0 bg-white z-10"
         />
     );
 }

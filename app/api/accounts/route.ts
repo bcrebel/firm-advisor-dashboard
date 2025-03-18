@@ -68,7 +68,9 @@ const advisorIds = [
   "REP123", "REP456", "REP789", "REP234", "REP567", 
   "REP890", "REP345", "REP678", "REP901", "REP432",
   "REP765", "REP098", "REP543", "REP876", "REP210",
-  "REP654", "REP111", "REP321", "REP222", "REP333"
+  "REP654", "REP111", "REP321", "REP222", "REP333",
+  "REP444", "REP555", "REP666", "REP777", "REP888",
+  "REP999", "REP000", "REP1234", "REP5678", "REP9012"
 ];
 
 const accounts: Account[] = [];

@@ -131,7 +131,9 @@ export default function AccountCard({ account }: AccountCardProps) {
                         </div>
                     </div>
                     <button onClick={() => setShowModal(true)} className="flex items-center w-10 h-10 bg-gray-200 rounded-full justify-center ml-auto">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 4.75C13 4.33579 12.6642 4 12.25 4C11.8358 4 11.5 4.33579 11.5 4.75V11L4.75 11C4.33579 11 4 11.3358 4 11.75C4 12.1642 4.33579 12.5 4.75 12.5H11.5V19.25C11.5 19.6642 11.8358 20 12.25 20C12.6642 20 13 19.6642 13 19.25V12.5H19.25C19.6642 12.5 20 12.1642 20 11.75C20 11.3358 19.6642 11 19.25 11L13 11V4.75Z" stroke-width="1.5" fill="currentColor"></path></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fillRule="evenodd" clipRule="evenodd" d="M13 4.75C13 4.33579 12.6642 4 12.25 4C11.8358 4 11.5 4.33579 11.5 4.75V11L4.75 11C4.33579 11 4 11.3358 4 11.75C4 12.1642 4.33579 12.5 4.75 12.5H11.5V19.25C11.5 19.6642 11.8358 20 12.25 20C12.6642 20 13 19.6642 13 19.25V12.5H19.25C19.6642 12.5 20 12.1642 20 11.75C20 11.3358 19.6642 11 19.25 11H13V4.75Z" fill="currentColor"/>
+                        </svg>
                     </button>
                     <ModalDialog open={showModal} onClose={() => setShowModal(false)}>
                         <SecurityTable holdings={holdings} accountName={account.name} />

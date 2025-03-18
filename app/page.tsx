@@ -27,7 +27,7 @@ export default async function Page() {
             <section>
                 <AdvisorTable />
             </section>
-            <section className="flex-1">
+            <section className="flex-1 max-h-[calc(100vh-2rem)] overflow-y-auto">
                 <AccountTable />
             </section>
         </div>

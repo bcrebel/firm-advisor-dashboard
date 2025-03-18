@@ -185,14 +185,18 @@ import {
     useFocusTrap(dialogRef);
   
     return createPortal(
-      <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+      <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
         <div
           aria-describedby={contentId}
           className="modal"
           role="dialog"
           ref={dialogRef}>
           <div className="flex flex-col bg-white rounded-lg p-8">
-            <button className="self-end" onClick={onClose}><svg width="24" height="24" viewBox="0 0 24s 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{width: '28px', height: '28px'}}><path fill-rule="evenodd" clip-rule="evenodd" d="M13.2665 12.2056L18.2989 7.17319L17.2382 6.11253L12.2058 11.1449L7.17343 6.11256L6.11277 7.17322L11.1451 12.2056L6.11277 17.238L7.17343 18.2986L12.2058 13.2662L17.2382 18.2986L18.2989 17.238L13.2665 12.2056Z" fill="currentColor"></path></svg></button>
+            <button className="self-end" onClick={onClose}>
+              <svg width="24" height="24" viewBox="0 0 24s 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{width: '28px', height: '28px'}}>
+                <path fillRule="evenodd" clipRule="evenodd" d="M13.2665 12.2056L18.2989 7.17319L17.2382 6.11253L12.2058 11.1449L7.17343 6.11256L6.11277 7.17322L11.1451 12.2056L6.11277 17.238L7.17343 18.2986L12.2058 13.2662L17.2382 18.2986L18.2989 17.238L13.2665 12.2056Z" fill="currentColor"/>
+              </svg>
+            </button>
             <div id={contentId}>{children}</div>
           </div>
         </div>

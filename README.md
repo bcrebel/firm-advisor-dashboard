@@ -14,7 +14,7 @@ A dashboard for viewing financial advisors and their client accounts. Built with
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone git@github.com:bcrebel/firm-advisor-dashboard.git
 cd firm-advisor-dashboard
 ```
 

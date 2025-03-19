@@ -1,6 +1,7 @@
 # Firm Advisor Dashboard
-
 A dashboard for viewing financial advisors and their client accounts. Built with Next.js, TypeScript, and Tailwind CSS.
+
+<img width="1417" alt="Screenshot 2025-03-19 at 5 07 34 PM" src="https://github.com/user-attachments/assets/2cd34cfe-4931-4d3b-a385-8f8721b7a8cf" />
 
 ## Getting Started
 

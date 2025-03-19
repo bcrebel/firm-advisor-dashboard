@@ -23,33 +23,35 @@ export interface Advisor {
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export function useAdvisorsWithAccounts() {
-    const { data: advisors, error: advisorsError } = useSWR<Advisor[]>('/api/advisors', fetcher);
-    const { data: accounts, error: accountsError } = useSWR<Account[]>('/api/accounts', fetcher);
+  const { data: advisors, error: advisorsError } = useSWR<Advisor[]>('/api/advisors', fetcher);
+  const { data: accounts, error: accountsError } = useSWR<Account[]>('/api/accounts', fetcher);
 
-    const isLoading = !advisors || !accounts;
-    const error = advisorsError || accountsError;
+  const isLoading = !advisors || !accounts;
+  const error = advisorsError || accountsError;
 
-    const accountMap = useMemo(() => {
-        const map = new Map();
-        accounts?.forEach(account => {
-            if (!map.has(account.repId)) {
-                map.set(account.repId, []);
-            }
-            map.get(account.repId).push(account);
-        });
-        return map;
-    }, [accounts]);
+  const accountMap = useMemo(() => {
+    const map = new Map();
+    accounts?.forEach(account => {
+      if (!map.has(account.repId)) {
+        map.set(account.repId, []);
+      }
+      map.get(account.repId).push(account);
+    });
+    return map;
+  }, [accounts]);
 
-    const data = useMemo(() => 
-        advisors?.map(advisor => ({
-            ...advisor,
-            accounts: accountMap.get(advisor.id) || []
-        }))
-    , [advisors, accountMap]);
+  const data = useMemo(
+    () =>
+      advisors?.map(advisor => ({
+        ...advisor,
+        accounts: accountMap.get(advisor.id) || [],
+      })),
+    [advisors, accountMap]
+  );
 
-    return {
-        data,
-        error,
-        isLoading
-    };
-} 
+  return {
+    data,
+    error,
+    isLoading,
+  };
+}

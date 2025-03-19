@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Firm Advisor Dashboard
+
+A dashboard for viewing financial advisors and their client accounts. Built with Next.js, TypeScript, and Tailwind CSS.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js (v20.9.0 or higher)
+- npm (v9.8.0 or higher)
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd firm-advisor-dashboard
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Start the development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+### Advisor Management
+- View a list of financial advisors
+- Sort advisors by name and number of accounts
+- Select an advisor to view their details
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Account Overview
+- Display all accounts associated with selected advisor
+- View account details including:
+  - Account name and number
+  - Custodian information
+  - Total holdings value
+- Sort accounts by various criteria
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Account Details
+- Interactive pie chart showing asset allocation
+- Detailed breakdown of holdings by category
+- Security-level detail including:
+  - Ticker symbols
+  - Number of units
+  - Current value
+  - Category classification
 
-## Deploy on Vercel
+### User Interface
+- Accessible components with keyboard navigation
+- Loading states and error handling
+- Modal dialogs for detailed information
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Potential Enhancements
+- Responsive design that works on all screen sizes
+- Navigation with tabs
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Technical Stack
+
+- **Framework**: Next.js 15
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Data Fetching**: SWR
+- **Charts**: Recharts
+- **State Management**: React Hooks
+
+## Development
+
+### Available Scripts
+
+- `npm run dev` - Start the development server
+- `npm run build` - Build the application for production
+- `npm run start` - Start the production server
+- `npm run lint` - Run ESLint
+- `npm run format` - Format code with Prettier
+
+### Project Structure
+
+```
+app/
+├── api/           # API routes
+├── components/    # React components
+├── hooks/         # Custom React hooks
+├── types/         # TypeScript type definitions
+└── page.tsx       # Main application page
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState, useMemo, useCallback } from 'react';
@@ -7,136 +7,152 @@ import { type Account } from './useAdvisorsWithAccounts';
 import useSWR from 'swr';
 
 interface Category {
-    id: number;
-    parentId: number | null;
-    title: string;
-    slug: string;
-    createdAt: string;
-    updatedAt: string;
+  id: number;
+  parentId: number | null;
+  title: string;
+  slug: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface Security {
-    id: string;
-    ticker: string;
-    name: string;
-    dateAdded: string;
-    categoryId: number;
+  id: string;
+  ticker: string;
+  name: string;
+  dateAdded: string;
+  categoryId: number;
 }
 
 interface BaseHolding {
-    ticker: string;
-    units: number;
-    unitPrice: number;
+  ticker: string;
+  units: number;
+  unitPrice: number;
 }
 
 interface EnrichedHolding extends BaseHolding {
-    id: string;
-    categoryName: string;
-    securityName?: string;
+  id: string;
+  categoryName: string;
+  securityName?: string;
 }
 
 interface AccountWithEnrichedHoldings {
-    name: string;
-    number: string;
-    repId: string;
-    custodian: string;
-    holdings: EnrichedHolding[];
+  name: string;
+  number: string;
+  repId: string;
+  custodian: string;
+  holdings: EnrichedHolding[];
+}
+
+interface UseSelectedAccountReturn {
+  selectedAccountNumber: string | undefined;
+  selectedAccount: AccountWithEnrichedHoldings | undefined;
+  setSelectedAccount: (accountNumber: string) => void;
+  isLoading: boolean;
 }
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
-export function useSelectedAccount() {
-    const { selectedAdvisor } = useSelectedAdvisor();
-    const { data: categories, isLoading: isLoadingCategories } = useSWR<Category[]>('/api/categories', fetcher);
-    const { data: securities, isLoading: isLoadingSecurities } = useSWR<Security[]>('/api/securities', fetcher);
-    const searchParams = useSearchParams();
-    const router = useRouter();
-    const [selectedAccountNumber, setSelectedAccountNumber] = useState<string | undefined>(
-        searchParams.get('accountNumber') || undefined
+export function useSelectedAccount(): UseSelectedAccountReturn {
+  const { selectedAdvisor } = useSelectedAdvisor();
+  const { data: categories, isLoading: isLoadingCategories } = useSWR<Category[]>(
+    '/api/categories',
+    fetcher
+  );
+  const { data: securities, isLoading: isLoadingSecurities } = useSWR<Security[]>(
+    '/api/securities',
+    fetcher
+  );
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [selectedAccountNumber, setSelectedAccountNumber] = useState<string | undefined>(
+    searchParams.get('accountNumber') || undefined
+  );
+
+  // Create lookup maps for securities and categories
+  const securitiesMap = useMemo(() => {
+    if (!securities) return new Map();
+    return new Map(securities.map(security => [security.ticker, security]));
+  }, [securities]);
+
+  const categoriesMap = useMemo(() => {
+    if (!categories) return new Map();
+    return new Map(categories.map(category => [category.id, category]));
+  }, [categories]);
+
+  // Sync state with URL params
+  useEffect(() => {
+    const accountFromUrl = searchParams.get('accountNumber');
+    if (accountFromUrl !== selectedAccountNumber) {
+      setSelectedAccountNumber(accountFromUrl || undefined);
+    }
+  }, [searchParams]);
+
+  // Auto-select first account when advisor is selected
+  useEffect(() => {
+    if (!selectedAdvisor?.accounts?.length) return;
+
+    if (!selectedAccountNumber) {
+      const firstAccountNumber = selectedAdvisor.accounts[0].number;
+      setSelectedAccountNumber(firstAccountNumber);
+      const params = new URLSearchParams(searchParams);
+      params.set('accountNumber', firstAccountNumber);
+      router.replace(`?${params.toString()}`, { scroll: false });
+    }
+  }, [selectedAdvisor, selectedAccountNumber, router, searchParams]);
+
+  const setSelectedAccount = useCallback(
+    (accountNumber: string) => {
+      setSelectedAccountNumber(accountNumber);
+      const params = new URLSearchParams(searchParams);
+      params.set('accountNumber', accountNumber);
+      router.push(`?${params.toString()}`);
+    },
+    [router, searchParams]
+  );
+
+  const baseAccount = useMemo(() => {
+    if (!selectedAdvisor?.accounts || !selectedAccountNumber) return undefined;
+    return selectedAdvisor.accounts.find(
+      (account: Account) => account.number === selectedAccountNumber
     );
+  }, [selectedAdvisor?.accounts, selectedAccountNumber]);
 
-    // Create lookup maps for securities and categories
-    const securitiesMap = useMemo(() => {
-        if (!securities) return new Map();
-        return new Map(securities.map(security => [security.ticker, security]));
-    }, [securities]);
-
-    const categoriesMap = useMemo(() => {
-        if (!categories) return new Map();
-        return new Map(categories.map(category => [category.id, category]));
-    }, [categories]);
-
-    // Sync state with URL params
-    useEffect(() => {
-        const accountFromUrl = searchParams.get('accountNumber');
-        if (accountFromUrl !== selectedAccountNumber) {
-            setSelectedAccountNumber(accountFromUrl || undefined);
-        }
-    }, [searchParams]);
-
-    // Auto-select first account when advisor is selected
-    useEffect(() => {
-        if (!selectedAdvisor?.accounts?.length) return;
-        
-        if (!selectedAccountNumber) {
-            const firstAccountNumber = selectedAdvisor.accounts[0].number;
-            setSelectedAccountNumber(firstAccountNumber);
-            const params = new URLSearchParams(searchParams);
-            params.set('accountNumber', firstAccountNumber);
-            router.replace(`?${params.toString()}`, { scroll: false });
-        }
-    }, [selectedAdvisor, selectedAccountNumber, router, searchParams]);
-
-    const setSelectedAccount = useCallback((accountNumber: string) => {
-        setSelectedAccountNumber(accountNumber);
-        const params = new URLSearchParams(searchParams);
-        params.set('accountNumber', accountNumber);
-        router.push(`?${params.toString()}`);
-    }, [router, searchParams]);
-
-    const baseAccount = useMemo(() => {
-        if (!selectedAdvisor?.accounts || !selectedAccountNumber) return undefined;
-        return selectedAdvisor.accounts.find(
-            (account: Account) => account.number === selectedAccountNumber
-        );
-    }, [selectedAdvisor?.accounts, selectedAccountNumber]);
-
-    // Process the account with enriched data
-    const selectedAccount = useMemo(() => {
-        if (!baseAccount?.holdings || isLoadingCategories || isLoadingSecurities) return undefined;
-
-        return {
-            name: baseAccount.name,
-            number: baseAccount.number,
-            repId: baseAccount.repId,
-            custodian: baseAccount.custodian,
-            holdings: baseAccount.holdings.map((holding: BaseHolding) => {
-                const security = securitiesMap.get(holding.ticker);
-                const category = security ? categoriesMap.get(security.categoryId) : undefined;
-                
-                // Get the parent category if available
-                let categoryName = category?.title;
-                if (category?.parentId) {
-                    const parentCategory = categoriesMap.get(category.parentId);
-                    if (parentCategory) {
-                        categoryName = parentCategory.title;
-                    }
-                }
-
-                return {
-                    ...holding,
-                    id: holding.ticker,
-                    categoryName: categoryName || 'Uncategorized',
-                    securityName: security?.name || undefined
-                };
-            })
-        } as AccountWithEnrichedHoldings;
-    }, [baseAccount, isLoadingCategories, isLoadingSecurities, securitiesMap, categoriesMap]);
+  // Process the account with enriched data
+  const selectedAccount = useMemo(() => {
+    if (!baseAccount?.holdings || isLoadingCategories || isLoadingSecurities) return undefined;
 
     return {
-        selectedAccountNumber,
-        selectedAccount,
-        setSelectedAccount,
-        isLoading: isLoadingCategories || isLoadingSecurities
-    };
-} 
+      name: baseAccount.name,
+      number: baseAccount.number,
+      repId: baseAccount.repId,
+      custodian: baseAccount.custodian,
+      holdings: baseAccount.holdings.map((holding: BaseHolding) => {
+        const security = securitiesMap.get(holding.ticker);
+        const category = security ? categoriesMap.get(security.categoryId) : undefined;
+
+        // Get the parent category if available
+        let categoryName = category?.title;
+        if (category?.parentId) {
+          const parentCategory = categoriesMap.get(category.parentId);
+          if (parentCategory) {
+            categoryName = parentCategory.title;
+          }
+        }
+
+        return {
+          ...holding,
+          id: holding.ticker,
+          categoryName: categoryName || 'Uncategorized',
+          securityName: security?.name || undefined,
+        };
+      }),
+    } as AccountWithEnrichedHoldings;
+  }, [baseAccount, isLoadingCategories, isLoadingSecurities, securitiesMap, categoriesMap]);
+
+  return {
+    selectedAccountNumber,
+    selectedAccount,
+    setSelectedAccount,
+    isLoading: isLoadingCategories || isLoadingSecurities,
+  };
+}

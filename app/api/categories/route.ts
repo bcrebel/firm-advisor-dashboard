@@ -1,144 +1,144 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
 const categories = [
-    {
-        "id": 1,
-        "parentId": null,
-        "title": "Equities",
-        "slug": "equities",
-        "createdAt": "2021-09-13T20:01:01.090Z",
-        "updatedAt": "2021-11-22T18:18:28.148Z"
-    },
-    {
-        "id": 2,
-        "parentId": 1,
-        "title": "US Equities",
-        "slug": "us-equities",
-        "createdAt": "2021-09-13T20:01:01.179Z",
-        "updatedAt": "2021-11-22T18:18:28.148Z"
-    },
-    {
-        "id": 10,
-        "parentId": null,
-        "title": "Fixed Income",
-        "slug": "fixed-income",
-        "createdAt": "2021-09-13T20:01:02.230Z",
-        "updatedAt": "2021-11-22T18:18:28.149Z"
-    },
-    {
-        "id": 6,
-        "parentId": 1,
-        "title": "International Equities",
-        "slug": "international-equities",
-        "createdAt": "2021-09-13T20:01:01.716Z",
-        "updatedAt": "2021-11-22T18:18:28.149Z"
-    },
-    {
-        "id": 11,
-        "parentId": 10,
-        "title": "US Fixed Income",
-        "slug": "us-fixed-income",
-        "createdAt": "2021-09-13T20:01:02.311Z",
-        "updatedAt": "2021-11-22T18:18:28.149Z"
-    },
-    {
-        "id": 12,
-        "parentId": 10,
-        "title": "International Fixed Income",
-        "slug": "international-fixed-income",
-        "createdAt": "2021-09-13T20:01:02.431Z",
-        "updatedAt": "2021-11-22T18:18:28.150Z"
-    },
-    {
-        "id": 13,
-        "parentId": 10,
-        "title": "Other Fixed Income",
-        "slug": "other-fixed-income",
-        "createdAt": "2021-09-13T20:01:02.551Z",
-        "updatedAt": "2021-11-22T18:18:28.150Z"
-    },
-    {
-        "id": 14,
-        "parentId": null,
-        "title": "Commodities",
-        "slug": "commodities",
-        "createdAt": "2021-09-13T20:01:02.632Z",
-        "updatedAt": "2021-11-22T18:18:28.150Z"
-    },
-    {
-        "id": 15,
-        "parentId": null,
-        "title": "Alternatives",
-        "slug": "alternatives",
-        "createdAt": "2021-09-13T20:01:02.711Z",
-        "updatedAt": "2021-11-22T18:18:28.150Z"
-    },
-    {
-        "id": 17,
-        "parentId": 15,
-        "title": "Other Alternatives",
-        "slug": "other-alternatives",
-        "createdAt": "2021-09-13T20:01:02.922Z",
-        "updatedAt": "2021-11-22T18:18:28.150Z"
-    },
-    {
-        "id": 3,
-        "parentId": 2,
-        "title": "US Equities: Large Cap",
-        "slug": "us-equities-large-cap",
-        "createdAt": "2021-09-13T20:01:01.262Z",
-        "updatedAt": "2021-11-22T18:18:28.148Z"
-    },
-    {
-        "id": 5,
-        "parentId": 2,
-        "title": "US Equities: Other",
-        "slug": "us-equities-other",
-        "createdAt": "2021-09-13T20:01:01.589Z",
-        "updatedAt": "2021-11-22T18:18:28.149Z"
-    },
-    {
-        "id": 4,
-        "parentId": 2,
-        "title": "US Equities: Small/Mid Cap",
-        "slug": "us-equities-smallmid-cap",
-        "createdAt": "2021-09-13T20:01:01.425Z",
-        "updatedAt": "2021-11-22T18:18:28.148Z"
-    },
-    {
-        "id": 7,
-        "parentId": 6,
-        "title": "International Equities: Developed (ex-US)",
-        "slug": "international-equities-developed-ex-us",
-        "createdAt": "2021-09-13T20:01:01.800Z",
-        "updatedAt": "2021-11-22T18:18:28.149Z"
-    },
-    {
-        "id": 8,
-        "parentId": 6,
-        "title": "International Equities: Emerging Markets",
-        "slug": "international-equities-emerging-markets",
-        "createdAt": "2021-09-13T20:01:01.963Z",
-        "updatedAt": "2021-11-22T18:18:28.149Z"
-    },
-    {
-        "id": 9,
-        "parentId": 6,
-        "title": "International Equities: Other",
-        "slug": "international-equities-other",
-        "createdAt": "2021-09-13T20:01:02.150Z",
-        "updatedAt": "2021-11-22T18:18:28.149Z"
-    },
-    {
-        "id": 16,
-        "parentId": 15,
-        "title": "Real Estate Funds",
-        "slug": "real-estate-funds",
-        "createdAt": "2021-09-13T20:01:02.792Z",
-        "updatedAt": "2021-11-22T18:18:28.150Z"
-    }
-]
+  {
+    id: 1,
+    parentId: null,
+    title: 'Equities',
+    slug: 'equities',
+    createdAt: '2021-09-13T20:01:01.090Z',
+    updatedAt: '2021-11-22T18:18:28.148Z',
+  },
+  {
+    id: 2,
+    parentId: 1,
+    title: 'US Equities',
+    slug: 'us-equities',
+    createdAt: '2021-09-13T20:01:01.179Z',
+    updatedAt: '2021-11-22T18:18:28.148Z',
+  },
+  {
+    id: 10,
+    parentId: null,
+    title: 'Fixed Income',
+    slug: 'fixed-income',
+    createdAt: '2021-09-13T20:01:02.230Z',
+    updatedAt: '2021-11-22T18:18:28.149Z',
+  },
+  {
+    id: 6,
+    parentId: 1,
+    title: 'International Equities',
+    slug: 'international-equities',
+    createdAt: '2021-09-13T20:01:01.716Z',
+    updatedAt: '2021-11-22T18:18:28.149Z',
+  },
+  {
+    id: 11,
+    parentId: 10,
+    title: 'US Fixed Income',
+    slug: 'us-fixed-income',
+    createdAt: '2021-09-13T20:01:02.311Z',
+    updatedAt: '2021-11-22T18:18:28.149Z',
+  },
+  {
+    id: 12,
+    parentId: 10,
+    title: 'International Fixed Income',
+    slug: 'international-fixed-income',
+    createdAt: '2021-09-13T20:01:02.431Z',
+    updatedAt: '2021-11-22T18:18:28.150Z',
+  },
+  {
+    id: 13,
+    parentId: 10,
+    title: 'Other Fixed Income',
+    slug: 'other-fixed-income',
+    createdAt: '2021-09-13T20:01:02.551Z',
+    updatedAt: '2021-11-22T18:18:28.150Z',
+  },
+  {
+    id: 14,
+    parentId: null,
+    title: 'Commodities',
+    slug: 'commodities',
+    createdAt: '2021-09-13T20:01:02.632Z',
+    updatedAt: '2021-11-22T18:18:28.150Z',
+  },
+  {
+    id: 15,
+    parentId: null,
+    title: 'Alternatives',
+    slug: 'alternatives',
+    createdAt: '2021-09-13T20:01:02.711Z',
+    updatedAt: '2021-11-22T18:18:28.150Z',
+  },
+  {
+    id: 17,
+    parentId: 15,
+    title: 'Other Alternatives',
+    slug: 'other-alternatives',
+    createdAt: '2021-09-13T20:01:02.922Z',
+    updatedAt: '2021-11-22T18:18:28.150Z',
+  },
+  {
+    id: 3,
+    parentId: 2,
+    title: 'US Equities: Large Cap',
+    slug: 'us-equities-large-cap',
+    createdAt: '2021-09-13T20:01:01.262Z',
+    updatedAt: '2021-11-22T18:18:28.148Z',
+  },
+  {
+    id: 5,
+    parentId: 2,
+    title: 'US Equities: Other',
+    slug: 'us-equities-other',
+    createdAt: '2021-09-13T20:01:01.589Z',
+    updatedAt: '2021-11-22T18:18:28.149Z',
+  },
+  {
+    id: 4,
+    parentId: 2,
+    title: 'US Equities: Small/Mid Cap',
+    slug: 'us-equities-smallmid-cap',
+    createdAt: '2021-09-13T20:01:01.425Z',
+    updatedAt: '2021-11-22T18:18:28.148Z',
+  },
+  {
+    id: 7,
+    parentId: 6,
+    title: 'International Equities: Developed (ex-US)',
+    slug: 'international-equities-developed-ex-us',
+    createdAt: '2021-09-13T20:01:01.800Z',
+    updatedAt: '2021-11-22T18:18:28.149Z',
+  },
+  {
+    id: 8,
+    parentId: 6,
+    title: 'International Equities: Emerging Markets',
+    slug: 'international-equities-emerging-markets',
+    createdAt: '2021-09-13T20:01:01.963Z',
+    updatedAt: '2021-11-22T18:18:28.149Z',
+  },
+  {
+    id: 9,
+    parentId: 6,
+    title: 'International Equities: Other',
+    slug: 'international-equities-other',
+    createdAt: '2021-09-13T20:01:02.150Z',
+    updatedAt: '2021-11-22T18:18:28.149Z',
+  },
+  {
+    id: 16,
+    parentId: 15,
+    title: 'Real Estate Funds',
+    slug: 'real-estate-funds',
+    createdAt: '2021-09-13T20:01:02.792Z',
+    updatedAt: '2021-11-22T18:18:28.150Z',
+  },
+];
 
 export async function GET() {
   return NextResponse.json(categories);
-} 
+}

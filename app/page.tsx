@@ -1,27 +1,18 @@
+'use client'
 import AdvisorTable from './components/AdvisorTable';
 import AccountTable from './components/AccountTable';
-import type { Advisor } from './hooks/useAdvisorsWithAccounts';
+import LoadingSpinner from './components/LoadingSpinner';
+import { useAdvisorsWithAccounts } from './hooks/useAdvisorsWithAccounts';
+import { useSelectedAccount } from './hooks/useSelectedAccount';
 
-interface Account {
-  name: string;
-  number: string;
-  repId: string;
-  holdings: {
-    ticker: string;
-    units: number;
-    unitPrice: number;
-  }[];
-  custodian: string;
-}
+export default function Page() {
+    const { isLoading: isLoadingAdvisors } = useAdvisorsWithAccounts();
+    const { isLoading: isLoadingAccount } = useSelectedAccount();
 
-interface Security {
-  id: string;
-  ticker: string;
-  name: string;
-  dateAdded: string;
-}
+    if (isLoadingAdvisors || isLoadingAccount) {
+        return <LoadingSpinner />;
+    }
 
-export default async function Page() {
     return (
         <div className="flex px-6 py-8 gap-6">
             <section>

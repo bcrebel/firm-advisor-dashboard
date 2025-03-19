@@ -106,11 +106,10 @@ export default function AccountCard({ account }: AccountCardProps) {
     ];
 
     return (
-        <div className="flex flex-col rounded-lg p-8 mb-6 bg-white">
+        <div className="flex flex-col rounded-lg p-8 mb-6 bg-white h-full">
             <div>
-         
-                <div className="flex">
-                <div className="flex-grow max-w-[600px]">
+                <div className="flex h-full min-h-[400px]">
+                <div className="flex-grow max-w-[800px]">
                 <div className="flex p-3 items-start space-x-4 bg-white mb-2">
                     <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
                         <span className="text-xl font-semibold text-gray-500">
@@ -150,30 +149,66 @@ export default function AccountCard({ account }: AccountCardProps) {
                         bodyTextSize="xxs"
                     />
                 </div>    
-                    <ResponsiveContainer width={325} height={325}>
-                        <PieChart>
-                            <Pie 
-                                data={categoryEntries} 
-                                dataKey="value" 
-                                nameKey="categoryName" 
-                                cx="50%" 
-                                cy="50%" 
-                                innerRadius={90} 
-                                outerRadius={120} 
-                                fill="#8884d8"
-                            >
-                                {categoryEntries.map((entry) => (
-                                    <Cell 
-                                        key={entry.categoryName} 
-                                        fill={selectedCategory ? 
-                                            (entry.categoryName === selectedCategory ? entry.color : '#E0E0E0') 
-                                            : entry.color
-                                        } 
-                                    />
-                                ))}
-                            </Pie>
-                        </PieChart>         
-                    </ResponsiveContainer>
+                    <div className="flex items-center justify-center">
+                        <ResponsiveContainer width={400} height="100%">
+                            <PieChart width={400} height={400}>
+                                <Pie 
+                                    data={categoryEntries} 
+                                    dataKey="value" 
+                                    nameKey="categoryName" 
+                                    cx="50%" 
+                                    cy="50%" 
+                                    innerRadius={115} 
+                                    outerRadius={145} 
+                                    fill="#8884d8"
+                                >
+                                    {categoryEntries.map((entry) => (
+                                        <Cell 
+                                            key={entry.categoryName} 
+                                            fill={selectedCategory ? 
+                                                (entry.categoryName === selectedCategory ? entry.color : '#E0E0E0') 
+                                                : entry.color
+                                            } 
+                                        />
+                                    ))}
+                                </Pie>
+                                <foreignObject x="50%" y="50%" width="300" height="300" transform="translate(-150, -150)">
+                                    <div className="flex flex-col items-center justify-center h-full">
+                                        {selectedCategory ? (
+                                            <>
+                                                <div className="text-sm font-medium text-gray-600">
+                                                    {selectedCategory}
+                                                </div>
+                                                <div className="text-xl font-semibold mt-1">
+                                                    {new Intl.NumberFormat('en-US', { 
+                                                        style: 'currency', 
+                                                        currency: 'USD',
+                                                        maximumFractionDigits: 0
+                                                    }).format(categoryEntries.find(entry => entry.categoryName === selectedCategory)?.value || 0)}
+                                                </div>
+                                                <div className="text-sm mt-1 px-2 py-1 rounded-full" style={{ backgroundColor: categoryEntries.find(entry => entry.categoryName === selectedCategory)?.color + '20' }}>
+                                                    {((categoryEntries.find(entry => entry.categoryName === selectedCategory)?.value || 0) / totalValue * 100).toFixed(1)}%
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="text-sm font-medium text-gray-600">
+                                                    Assets
+                                                </div>
+                                                <div className="text-xl font-semibold mt-1">
+                                                    {new Intl.NumberFormat('en-US', { 
+                                                        style: 'currency', 
+                                                        currency: 'USD',
+                                                        maximumFractionDigits: 0
+                                                    }).format(totalValue)}
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                </foreignObject>
+                            </PieChart>         
+                        </ResponsiveContainer>
+                    </div>
                 </div>
       
             </div>

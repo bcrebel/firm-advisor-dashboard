@@ -1,4 +1,5 @@
 import useSWR from 'swr';
+import { useMemo } from 'react';
 
 export interface Account {
   name: string;
@@ -28,18 +29,23 @@ export function useAdvisorsWithAccounts() {
     const isLoading = !advisors || !accounts;
     const error = advisorsError || accountsError;
 
-    const accountMap = new Map();
-    accounts?.forEach(account => {
-        if (!accountMap.has(account.repId)) {
-            accountMap.set(account.repId, []);
-        }
-        accountMap.get(account.repId).push(account);
-    });
+    const accountMap = useMemo(() => {
+        const map = new Map();
+        accounts?.forEach(account => {
+            if (!map.has(account.repId)) {
+                map.set(account.repId, []);
+            }
+            map.get(account.repId).push(account);
+        });
+        return map;
+    }, [accounts]);
 
-    const data = advisors?.map(advisor => ({
-        ...advisor,
-        accounts: accountMap.get(advisor.id) || []
-    }));
+    const data = useMemo(() => 
+        advisors?.map(advisor => ({
+            ...advisor,
+            accounts: accountMap.get(advisor.id) || []
+        }))
+    , [advisors, accountMap]);
 
     return {
         data,

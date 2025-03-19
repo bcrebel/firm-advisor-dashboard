@@ -57,26 +57,20 @@ export default function AccountTable() {
     const accounts = selectedAdvisor?.accounts || [];
     const accountsWithIds = accounts.map((account: Account) => ({
         ...account,
-        id: account.number // Using account number as the unique identifier
+        id: account.number
     }));
 
     const handleRowClick = (account: Account) => {
         setSelectedAccount(account.number);
     };
 
-    // Select the first account on initial load if no account is selected
     useEffect(() => {
         if (!selectedAccountNumber && accounts.length > 0) {
             setSelectedAccount(accounts[0].number);
         }
     }, [selectedAccountNumber, accounts, setSelectedAccount]);
 
-    // Early returns after all hooks
-    if (!selectedAdvisor) {
-        return <div className="text-gray-500 italic">Select an advisor to view their accounts</div>;
-    }
-
-    if (accounts.length === 0) {
+    if (selectedAdvisor && accounts.length === 0) {
         return <div className="text-gray-500 italic">No accounts found for this advisor</div>;
     }
 
@@ -87,7 +81,7 @@ export default function AccountTable() {
                     <AccountCard account={selectedAccount} />
                 </div>
             )}
-                        <h2 className="text-sm font-semibold mb-2">Accounts for {selectedAdvisor.name}</h2>
+            {selectedAdvisor && <h2 className="text-sm font-semibold my-2">Accounts for {selectedAdvisor.name}</h2>}
 
             <DataTable<Account & { id: string }> 
                 entries={accountsWithIds}

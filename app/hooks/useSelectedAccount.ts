@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useSelectedAdvisor } from './useSelectedAdvisor';
 import { type Account } from './useAdvisorsWithAccounts';
 import useSWR from 'swr';
@@ -76,11 +76,10 @@ export function useSelectedAccount() {
 
     // Auto-select first account when advisor is selected
     useEffect(() => {
-        if (!selectedAdvisor) return;
+        if (!selectedAdvisor?.accounts?.length) return;
         
-        const accounts = selectedAdvisor.accounts || [];
-        if (accounts.length > 0 && !selectedAccountNumber) {
-            const firstAccountNumber = accounts[0].number;
+        if (!selectedAccountNumber) {
+            const firstAccountNumber = selectedAdvisor.accounts[0].number;
             setSelectedAccountNumber(firstAccountNumber);
             const params = new URLSearchParams(searchParams);
             params.set('accountNumber', firstAccountNumber);
@@ -88,44 +87,51 @@ export function useSelectedAccount() {
         }
     }, [selectedAdvisor, selectedAccountNumber, router, searchParams]);
 
-    const setSelectedAccount = (accountNumber: string) => {
+    const setSelectedAccount = useCallback((accountNumber: string) => {
         setSelectedAccountNumber(accountNumber);
         const params = new URLSearchParams(searchParams);
         params.set('accountNumber', accountNumber);
         router.push(`?${params.toString()}`);
-    };
+    }, [router, searchParams]);
 
-    const baseAccount = selectedAdvisor?.accounts?.find(
-        (account: Account) => account.number === selectedAccountNumber
-    );
+    const baseAccount = useMemo(() => {
+        if (!selectedAdvisor?.accounts || !selectedAccountNumber) return undefined;
+        return selectedAdvisor.accounts.find(
+            (account: Account) => account.number === selectedAccountNumber
+        );
+    }, [selectedAdvisor?.accounts, selectedAccountNumber]);
 
-    // Only process the account if we have all the required data
-    const selectedAccount = (baseAccount && !isLoadingCategories && !isLoadingSecurities) ? {
-        name: baseAccount.name,
-        number: baseAccount.number,
-        repId: baseAccount.repId,
-        custodian: baseAccount.custodian,
-        holdings: baseAccount.holdings.map((holding: BaseHolding) => {
-            const security = securitiesMap.get(holding.ticker);
-            const category = security ? categoriesMap.get(security.categoryId) : undefined;
-            
-            // Get the parent category if available
-            let categoryName = category?.title;
-            if (category?.parentId) {
-                const parentCategory = categoriesMap.get(category.parentId);
-                if (parentCategory) {
-                    categoryName = parentCategory.title;
+    // Process the account with enriched data
+    const selectedAccount = useMemo(() => {
+        if (!baseAccount?.holdings || isLoadingCategories || isLoadingSecurities) return undefined;
+
+        return {
+            name: baseAccount.name,
+            number: baseAccount.number,
+            repId: baseAccount.repId,
+            custodian: baseAccount.custodian,
+            holdings: baseAccount.holdings.map((holding: BaseHolding) => {
+                const security = securitiesMap.get(holding.ticker);
+                const category = security ? categoriesMap.get(security.categoryId) : undefined;
+                
+                // Get the parent category if available
+                let categoryName = category?.title;
+                if (category?.parentId) {
+                    const parentCategory = categoriesMap.get(category.parentId);
+                    if (parentCategory) {
+                        categoryName = parentCategory.title;
+                    }
                 }
-            }
 
-            return {
-                ...holding,
-                id: holding.ticker,
-                categoryName: categoryName || 'Uncategorized',
-                securityName: security?.name || undefined
-            };
-        })
-    } as AccountWithEnrichedHoldings : undefined;
+                return {
+                    ...holding,
+                    id: holding.ticker,
+                    categoryName: categoryName || 'Uncategorized',
+                    securityName: security?.name || undefined
+                };
+            })
+        } as AccountWithEnrichedHoldings;
+    }, [baseAccount, isLoadingCategories, isLoadingSecurities, securitiesMap, categoriesMap]);
 
     return {
         selectedAccountNumber,
